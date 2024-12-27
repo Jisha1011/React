@@ -1,11 +1,32 @@
-import React, { useState } from 'react'
+import React, { useState,useEffect} from 'react'
 import './LoginSignup.css'
 
 import email_icon from '../Assets/email.png'
 import password_icon from '../Assets/password.png'
 import person_iconf from '../Assets/person.png'
+
+import axios from 'axios';
+
+const callLogin =async()=>{
+    const API_URL="http://localhost:8080";
+    try{
+const reponse= await axios.get(`${API_URL}/login`);
+return reponse.data;
+    }
+    catch(error){
+        console.error('Error calling login',error);
+    }
+}
+
  const LoginSignup = () => {
+    
     const[action,setAction] = useState("SignUp")
+
+    const singUpProcess=()=>{
+        setAction("SignUp");
+        callLogin();
+    }
+    
   return (
     <div className='container'>
         <div className='header'>
@@ -33,8 +54,9 @@ import person_iconf from '../Assets/person.png'
             </div>}
             
             <div className="submit-container">
-                <div className={action==="Login"?"submit gray":"submit"}onClick={()=>setAction("SignUp")}>
+                <div className={action==="Login"?"submit gray":"submit"}onClick={singUpProcess} >
                     SignUp
+                   
                 </div>
                 <div className={action==="SignUp"?"submit gray":"submit"}onClick={()=>setAction("Login")}>
                     Login
